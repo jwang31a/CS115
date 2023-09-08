@@ -1,3 +1,5 @@
+import math
+
 """
 integers (int)
 floating point (float)
@@ -47,3 +49,9 @@ def main():
     print(functionName(5))
 
 main()
+
+#function that calculates area of circle by providing radius
+def areaCircle(r):
+    return math.pi * (r ** 2)
+
+print(areaCircle(2))
