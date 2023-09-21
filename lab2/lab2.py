@@ -1,14 +1,14 @@
 """
-#Jun Hong Wang
-#I pledge my honor that I have abided by the Stevens Honor System.
-#9/21/23
+#Name: Jun Hong Wang
+#Pledge: I pledge my honor that I have abided by the Stevens Honor System.
+#Date: 9/21/23
 #Lab 2: Recursion
 """
 
 """
-takes 2 lists (preferably of equal lengths) and computes dot product
+input: L and K, both lists
 if not equal length, return 0
-base case is when the remaining lists are both empty, return 0
+if they are, multiply L[0], K[0] then add the dot product of the rest
 """
 def dot(L, K):
     if L == [] and K == []:
@@ -19,7 +19,8 @@ def dot(L, K):
     return L[0] * K[0] + dot(L[1:], K[1:])
 
 """
-a recursive defined length function for lists
+a recursively defined length function for lists
+slightly different from the one in class since I did it differently
 """
 def recursiveLength(List):
     l = 0
@@ -29,6 +30,7 @@ def recursiveLength(List):
     l += 1 + recursiveLength(List[0 : -1])
     return l
 
+#test cases for length and dot product
 # print(recursiveLength([]))
 # print(recursiveLength([1,2,3,4,5,6]))
 # print(recursiveLength([1]))
@@ -40,9 +42,9 @@ def recursiveLength(List):
 # print(dot(vec1, vec3))
 
 """
-takes a string input, and separates the strings into a list of individual characters
-if string is empty, create empty list
-otherwise, return the first character in the list in its own list, then recursively call function on rest of string
+input: string
+if empty string, return empty list
+otherwise, return list with first character, then call function on rest of string
 """
 def explode(S):
     if S == "":
@@ -54,8 +56,12 @@ def explode(S):
 # print(explode(" "))
 
 """
-takes an element e and sequence L, where we are trying to find the index of e in L
-if e is at L[0], return 0, otherwise return 1 + ind(L[1:])
+input: takes element e and sequence L, where e is element we want to find in L
+if L is empty list or string, return 0
+if e is at L[0], return 0
+otherwise, return 1 + ind(e, rest of list)
+output: integer as index
+if the element isn't in L, index will be length of list
 """
 def ind(e, L):
     if L == [] or L == "":
@@ -73,9 +79,11 @@ def ind(e, L):
 # print(ind(' ', 'outer exploration'))
 
 """
-takes an element and a list, return the same list with all instances of element gone
-will use ind(e, L) to find the first existence then remove it
-if ind(e, L) = length of the list, then it isn't in the list, return given list
+input: element e and list L, 
+output: return the list with all instances of e gone
+if e isn't in the list, return the list as is
+otherwise, call remove all with the first instance of e removed
+
 """
 def removeAll(e, L):
     index = ind(e, L)
@@ -99,6 +107,7 @@ def myFilter(func, L):
     if L == []:
         return []
     if func(L[0]):
+        #reason that L[0] is in list is so that a list is returned at the end
         return [L[0]] + myFilter(func, L[1:])
     return myFilter(func, L[1:])
 
@@ -116,7 +125,7 @@ def isDivBy5(x):
 
 """
 input: list where there may be nested lists
-reverse the order of elements, and reverse the nested lists
+output: list with reversed order of elements, and reversed order of the elements in nested lists
 if the list is empty, return empty list
 if L[0] is a list, return a deepreverse of the rest of the list + a deepreverse of L[0]
 if L[0] isn't a list, deepreverse the rest of the list then addf L[0] in its own list
