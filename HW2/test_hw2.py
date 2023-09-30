@@ -7,7 +7,7 @@ CS115 - Hw 2 Test Script
 '''
 import unittest
 import operator
-import hw2
+import hw2old as hw2
 
 class Test(unittest.TestCase):
 
