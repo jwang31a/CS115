@@ -72,7 +72,8 @@ def factorial(n):
     else:
         return n * factorial(n - 1)
     
-#optimized for compiler since no more calculations in traceback, less memory used because of the stack
+#optimized for compiler since no more calculations in traceback, less memory used because stack doesn't have to remember traceback
+#also easier compiler since after base case is reached, there is no more calculation to do, so directly returns final value
 def factorialTail(n, a = 1):
     if n == 0:
         return a
@@ -81,3 +82,11 @@ def factorialTail(n, a = 1):
     
 print(factorial(5))
 print(factorialTail(5))
+
+def reverseString(word, newWord = ""):
+    if word == "":
+        return newWord
+    return reverseString(word[0:-1], newWord + word[-1])
+
+print(reverseString("racecar"))
+print(reverseString("taco cat"))
