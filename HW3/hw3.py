@@ -5,7 +5,10 @@ Pledge:    I pledge my honor that I have abided by the Stevens Honor System.
 
 CS115 - Hw 3
 '''
-# Be sure to submit hw3.py.  Remove the '_template' from the file name.
+
+import sys
+
+sys.setrecursionlimit(1500)
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' PROBLEM 0
@@ -13,33 +16,32 @@ CS115 - Hw 3
 ' See the PDF in Canvas for more details.
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 # your code goes here
-
-from functools import reduce
-
-def change(amount, coins):
-    if amount == 0:
-        return 0
-    elif coins == []:
-        return float("inf")
-    elif coins[0] > amount:
-        return float("inf")
-    else:
-        use = 1 + change(amount - coins[0], coins)
-        lose = change(amount, coins[1:])
-        return min(use, lose)
     
 def giveChange(amount, coins):
+    """
+    input of integer amount, list of coins
+    similar design to previous lab, where a list is generated through a helper function
+    number of coins is length of list generated
+    returns list, index 0 is int with number of coins, index 1 is list of all coins used
+    """
     coinList = giveChangeHelper(amount, coins)
-    return [sum(coinList), coinList]
+    return [len(coinList), coinList]
     
 def giveChangeHelper(amount, coins):
-    # print(amount)
+    """
+    helper function for giveChange that takes in int amount and list of coins
+    if amount is 0, return empty list
+    if coins is empty, return inf
+    if first coin > amount, call giveChangeHelper(amount, rest of list)
+    else, use it or lose it to figure out which list uses fewer coins, return that one
+        also figure out if any of the lists sums to infinity, if so, don't use that list
+    """
     if amount == 0:
         return []
     elif coins == []:
         return [float("inf")]
     elif coins[0] > amount:
-        return [float("inf")]
+        return giveChangeHelper(amount, coins[1:])
     else:
         """
         if the sum of values is infinity, return the other one
@@ -62,7 +64,9 @@ def giveChangeHelper(amount, coins):
 
 # def sum(coinList):
 #     return reduce(lambda x, y : x + y, coinList)
-print(giveChange(48, [1, 5, 10, 25]))
+# print(giveChange(48, [1, 5, 10, 25]))
+
+# print(giveChange(48, [50, 25, 10, 5, 1]))
 
 # Here's the list of letter values and a small dictionary to use.
 # Leave the following lists in place.
@@ -87,9 +91,36 @@ def wordsWithScore(dct, scores):
     value. For example, wordsWithScore(Dictionary, scrabbleScores) should
     return [['a', 1], ['am', 4], ['at', 2] ...etc... ]
     '''
-    return None  # your code goes here
+    if dct == []:
+        return []
+    else:
+        return [[dct[0], wordScore(dct[0], scores)]] + wordsWithScore(dct[1:], scores)
 
+#letterscore and wordscore taken from my work in previous homework
+def letterScore(letter, scorelist):
+    """
+    takes a letter and list of lists with letter and value as input
+    empty list returns -1 (because score shouldn't be negative)
+    if first list in scorelist has the letter, return the score
+    otherwise recursively call letterScore with the same letter and the rest of the list
+    """
+    if scorelist == []:
+        return 0
+    elif scorelist[0][0] == letter:
+        return scorelist[0][1]
+    return letterScore(letter, scorelist[1:])
 
+def wordScore(S, scorelist):
+    """
+    takes a string, checks if it's empty, if so, return 0
+    otherwise, return the letterscore of the first letter and call wordscore on the rest of the list
+    """
+    if S == "":
+        return 0
+    return letterScore(S[0], scorelist) + wordScore(S[1:], scorelist)
+
+# print(wordScore("am", scrabbleScores))
+# print(wordsWithScore(Dictionary, scrabbleScores))
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' PROBLEM 2
@@ -101,9 +132,13 @@ def wordsWithScore(dct, scores):
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 def take(n, L):
     '''Returns the list L[0:n], assuming L is a list and n is at least 0.'''
-    return None  # your code goes here
+    print(n, L)
+    if n == 0 or L == []:
+        return []
+    else:
+        return [L[0]] + take(n - 1, L[1:])
 
-
+print(take(10, ["hello"]))
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' PROBLEM 3
@@ -114,6 +149,8 @@ def take(n, L):
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 def drop(n, L):
     '''Returns the list L[n:], assuming L is a list and n is at least 0.'''
-    return None  # your code goes here
-
+    if n == 0:
+        return L
+    else:
+        return drop(n - 1, L[1:])
 
