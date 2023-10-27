@@ -1,0 +1,1 @@
+#more minterm expansion principle i guess
