@@ -128,14 +128,17 @@ def compression(S):
 # # print(ans)
 
 """
+question 1:
 the maximum length of a string returned by compress would be 5 * 65 (325) if the input string alternates between 1 and 0, like 101010...
 since the algorithm starts with compressing 0 first, there will be an extra 5 bits compared to if the string was 010101...
 
+question 2:
 the smallest length returned by the compression algorithm is 25, so the smallest ratio is about 0.39
 the largest length is 325, so the largest ratio is about 5.08
 using the example images, the ratio was low, below 1.5
 it looks like the more 0s or 1s there are in a row, the lower the ratio (which makes sense)
 
+question 3:
 I've heard of "lossy" compression algorithms where information is lost after every compression run. 
 I think this is why when images or videos get reposted, the quality gradually gets worse and worse and there's no way to recover the original from the lower quality one.
 Professor Lai says that there's an algorithm that can always output a shorter string that represents an image, but using the example of reposting a compressed image or video, something is always lost.
