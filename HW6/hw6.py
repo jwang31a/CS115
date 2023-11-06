@@ -30,11 +30,7 @@ def findEndIndex(S):
         return 0
     else:
         return 1 + findEndIndex(S[1:])
-    
-# testS = "0" * 63
-# print(findEndIndex(testS))
-# print(findEndIndex("0"))
-#     
+
 def decToBin(n):
     """
     decimal to binary function to make converting differences in index into binary for compress easier
@@ -60,6 +56,8 @@ def compress(S):
 def compressAlternator(S, n):
     """
     repeats is 1 + endIndex b/c we want to include the first index (0)
+    recursive function that alternates the values that are being compressed
+    keeps recursively calling until input string S is empty
     """
     if S == "":
         return ""
@@ -82,33 +80,10 @@ def compressAlternator(S, n):
         else:
             return extra + b + compressAlternator(S[repeats:], "0")
 
-
-
-    # if S == "":
-    #     return ""
-    # # print(S, S[0])
-    # currEnd = findEndIndex(S) + 1
-    # #there's a chance that currEnd is higher than max run length, so just let the first 31 and run again on the rest
-    # if currEnd > MAX_RUN_LENGTH:
-    #     b = decToBin(MAX_RUN_LENGTH)
-    #     currEnd = 31
-    #     return b + COMPRESSED_BLOCK_SIZE * "0" + compress(S[currEnd:])
-    # else:
-    #     b = decToBin(currEnd)
-    #     extra = ""
-    #     if len(b) <= 5:
-    #         extra = (5 - len(b)) * "0"
-    #     if S[0] == "1" and extra != "":
-    #         return extra + b + compress(S[currEnd:])
-    #     elif S[0] == "1" and extra == "":
-    #         return "0" * COMPRESSED_BLOCK_SIZE + extra + b + compress(S[currEnd:])
-    #     else:
-    #         return extra + b + compress(S[currEnd:])
-
-
-# print(compress("0" * 64))
-
 def binToNum(s):
+    """
+    converts binary to decimal
+    """
     if s == "":
         return 0
     else:
@@ -118,7 +93,7 @@ def uncompress(C):
     """
     takes compressed string and uncompresses it
     first uncompress to 0s, then 1s
-    could possibly do this with another variable default set to 0 in this function?
+    uses helper function alternator that has the bulk of this function's code
     """
     return uncompressAlternator(C, "0")
     
@@ -151,3 +126,34 @@ def compression(S):
 # # print(uncompress(compress(seq)))
 # print(compress(seq))
 # # print(ans)
+
+"""
+the maximum length of a string returned by compress would be 5 * 65 (325) if the input string alternates between 1 and 0, like 101010...
+since the algorithm starts with compressing 0 first, there will be an extra 5 bits compared to if the string was 010101...
+
+the smallest length returned by the compression algorithm is 25, so the smallest ratio is about 0.39
+the largest length is 325, so the largest ratio is about 5.08
+using the example images, the ratio was low, below 1.5
+it looks like the more 0s or 1s there are in a row, the lower the ratio (which makes sense)
+
+I've heard of "lossy" compression algorithms where information is lost after every compression run. 
+I think this is why when images or videos get reposted, the quality gradually gets worse and worse and there's no way to recover the original from the lower quality one.
+Professor Lai says that there's an algorithm that can always output a shorter string that represents an image, but using the example of reposting a compressed image or video, something is always lost.
+Eventually, so much information is lost that it's unclear that the original file can't be recovered at all.
+If you keep applying his algorithm to compress what's already been compressed, then you lose more and more information.
+"""
+
+seq1 = "01" * 32
+print(compression(seq1))
+seq2 = "10" * 32
+print(compression(seq2))
+seq3 = "0" * 64
+print(compression(seq3))
+seq4 = "00011000"+"00111100"*3 + "01111110"+"11111111"+"00111100"+"00100100"
+print(compression(seq4))
+seq5 = "0"*8 + "01100110"*2 + "0"*8 + "00001000" + "01000010" + "01111110" + "0"*8
+print(compression(seq5))
+seq6 = "1"*9 + "0"*7 + "10000000"*2 + "1"*7 + "0" + "00000001"*2 + "1"*7 + "0"
+print(compression(seq6))
+seq7 = "00000001" * 8
+print(compression(seq7))
