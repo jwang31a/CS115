@@ -103,6 +103,8 @@ def compression(S):
     and shortest possible compressed string. I found that the max ratio is
     about 5.07 while the minimum is 0.39. The average is about 1.8 based off
     the 5 data points.
+
+    The more places where the bits change, the bigger the file will be.
     '''
 
     '''
