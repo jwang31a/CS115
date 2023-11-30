@@ -249,12 +249,16 @@ def letterCounts(fname):
     case letters the same.  Print the list of pairs (n,c) where c is a letter
     and n is the count for that letter.  Omit (n,c) if n==0. For non-letters,
     c should be "non-letter". Print the list in descending order by counts.'''
+    #hard coded non letter key to avoid key error
+    #could also hard code all the letters in, but I don't really like that, instead, check every letter to see if it's in the dictionary (still inefficient)
     letterDict = {"non-letter" : 0}
     with open(fname, "r") as file:
         fcontent = file.read().lower()
+    #I loaded the whole file, but it's probably better to read line by line?
     for s in fcontent:
         if s not in letterDict:
             letterDict[s] = 0
+            #initializes key value pair for a specific letter, avoids key error
         if letter(s) == s:
             letterDict[s] += 1
         else:
@@ -263,6 +267,7 @@ def letterCounts(fname):
     for n in letterDict:
         if letterDict[n] != 0:
             ret += [(letterDict[n], n)]
+    #either use built in sort function with reverse True or our insertion sort and reverse the list
     # ret.sort(reverse = True)
     insertSortV1(ret)
     ret.reverse()
@@ -293,6 +298,7 @@ def letterCounts(fname):
 # Here is part of the output of letterCounts("dict.py"):
 # [(17293, 'non-letter'), (1927, 'e'), (1606, 'a'), (1331, 'o'), (1250, 'r')...
 
+#values may be slightly off? are the values in the hints accurate?
 print(letterCounts("small_file.txt"))
 print()
 print(letterCounts("dict.py"))
@@ -300,3 +306,12 @@ print()
 print(letterCounts("huckfinn.txt"))
 print()
 print(letterCounts("prejudice.txt"))
+
+#testing
+# nonalpha = 0
+# with open("dict.py", "r") as file:
+#     fc = file.read()
+# for c in fc:
+#     if not c.isalpha():
+#         nonalpha += 1
+# print(nonalpha)
