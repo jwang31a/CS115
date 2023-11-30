@@ -48,9 +48,18 @@ def insertV1(L, i):
     # Use a single loop that checks and swaps as it goes, like this:
     # [0,2,4,6, 3 ,0,5] [0,2,4, 3, 6,0,5] [0,2, 3 ,4,6,0,5]
     # Invariant: L[0:i+1] sorted except possibly L[j-1] versus L[j]
+    for x in range(i, -1, -1):
+        if L[i] < L[x]:
+            swap(L, i, x)
+            i = x
+            x -= 1
+        if L[i] > L[x]:
+            #this part added to remove unnecessary comparisons
+            break
+    return L
 
-    pass
-
+# testList = [0,2,4,6, 3 ,0,5]
+# print(insertV1(testList, 4))
 
 def testInsert(ins):
     '''Assume ins is a function.  Test whether it solves the insert problem.
@@ -76,6 +85,8 @@ def testInsert(ins):
     ins(L,1)
     assert L == [3,4]
 
+# testInsert(insertV1)
+
 #############################################################
 # Step 1: Implement this function.
 # Before coding, make sure you understand the description of
@@ -85,13 +96,23 @@ def testInsert(ins):
 
 def search(L, i, x):
     '''Assuming L[0:i] is sorted and 0 <= i <= len(L),
-       return j such that 0 <= j <= i and L[0:j] <= x < L[j:i].'''
+       return j such that 0 <= j <= i and L[0:j] <= x < L[j:i].
+    takes in list sorted from 0 (inclusive) to i (exclusive), such that i is in the list
+    return j such that j is between 0 and i
+    '''
     # Linear search: try successive indexes, starting with 0.
     # Invariant: L[0:j] <= x and j <= i
     # If you want to put the invariant as an assertion, use allLE from above.
+    count = 0
+    j = 0
+    for n in range(0, i):
+        if x >= L[n]:
+            count += 1
+            j = n
+    assert allLE(L[0:j], x)
+    return count
 
-    pass
-
+# print(search([0,2,4,6,3,0,5], 3, 3))
 
 def testSearch():
     # in middle
@@ -107,7 +128,7 @@ def testSearch():
     # at start, short list
     assert search([5], 1, 2) == 0
 
-
+# testSearch()
 
 #############################################################
 # Step 2: Implement the following version of insertion.
@@ -121,7 +142,17 @@ def insertV2(L, i):
     # Do this version as follows: save the value of L[i], use the 
     # search function to find where to insert that value, then 
     # shift to make room, and finally put the value in place.
+    val = L[i]
+    index = search(L, i, val)
+    for x in range(index, i):
+        swap(L, x, i)
+    return L
 
+# testlist2 = [0,2,4,6,3,0,5]
+# assert insertV2(testlist2, 4) == [0,2,3,4,6,0,5]
+# print(testlist2)
+
+# testInsert(insertV2)
 
 ##################################################
 # Step 3: Here are two versions of insertion sort.
@@ -144,6 +175,7 @@ def insertSortV2(L):
     assert isSorted(L)
 
 
+
 import random # for testing
 
 def randList(N):
@@ -158,7 +190,19 @@ def testV1():
 
 def testV2():
     testSort(insertSortV2)
-    
+
+# testlist3 = randList(15)
+# print(testlist3)
+# insertSortV1(testlist3)
+# print(testlist3)
+
+# print()
+
+# testlist4 = randList(15)
+# print(testlist4)
+# insertSortV2(testlist4)
+# print(testlist4)
+
 def testSort(sortFun):
     
     def test(L):
@@ -175,7 +219,8 @@ def testSort(sortFun):
     test(randList(10))
     test(randList(20))
 
-
+# testSort(insertSortV1)
+# testSort(insertSortV2)
 
 #############################################
 # Step 4: Implement letterCounts.
@@ -199,8 +244,22 @@ def letterCounts(fname):
     case letters the same.  Print the list of pairs (n,c) where c is a letter
     and n is the count for that letter.  Omit (n,c) if n==0. For non-letters,
     c should be "non-letter". Print the list in descending order by counts.'''
-
-    pass
+    letterDict = {"non-letter" : 0}
+    with open(fname, "r") as file:
+        fcontent = file.read().lower()
+    for s in fcontent:
+        if s not in letterDict:
+            letterDict[s] = 0
+        if letter(s) == s:
+            letterDict[s] += 1
+        else:
+            letterDict["non-letter"] += 1
+    ret = []
+    for n in letterDict:
+        if letterDict[n] != 0:
+            ret += [(letterDict[n], n)]
+    ret.sort(reverse = True)
+    return ret
         
 # HINTS
 
@@ -227,3 +286,10 @@ def letterCounts(fname):
 # Here is part of the output of letterCounts("dict.py"):
 # [(17293, 'non-letter'), (1927, 'e'), (1606, 'a'), (1331, 'o'), (1250, 'r')...
 
+print(letterCounts("small_file.txt"))
+print()
+print(letterCounts("dict.py"))
+print()
+print(letterCounts("huckfinn.txt"))
+print()
+print(letterCounts("prejudice.txt"))
