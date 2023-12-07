@@ -314,4 +314,5 @@ print(letterCounts("prejudice.txt"))
 # for c in fc:
 #     if not c.isalpha():
 #         nonalpha += 1
+# print(fc.count("o"))
 # print(nonalpha)
